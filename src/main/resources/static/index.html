@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinWise - Smart Finance for Creators</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            --neon-green: #00ff88;
+            --neon-pink: #ff0080;
+            --neon-blue: #00d4ff;
+            --neon-purple: #8000ff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --shadow-glow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            animation: backgroundMove 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* User Level System */
+        .user-level {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 15px 25px;
+            text-align: center;
+        }
+
+        .level-badge {
+            background: var(--neon-green);
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .xp-bar {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            width: 65%;
+            border-radius: 3px;
+            animation: xpGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes xpGlow {
+            from { box-shadow: 0 0 5px var(--neon-green); }
+            to { box-shadow: 0 0 15px var(--neon-green); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--neon-pink) 0%, transparent 70%);
+            opacity: 0.3;
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.3; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.1; }
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); }
+            to { filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8)); }
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            opacity: 0.9;
+        }
+
+        /* Glass Morphism Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+            border-color: var(--neon-green);
+        }
+        
+        .card h2 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        /* Neon Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--text-secondary);
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .account-card {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            color: #000;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+        
+        .account-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .account-card p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .balance {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .operations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .chart-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .chart-section h3 {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-pink));
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.2);
+        }
+
+        .summary-card h4 {
+            margin-bottom: 10px;
+            opacity: 0.9;
+            color: var(--text-secondary);
+        }
+
+        .summary-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--neon-green);
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .goal-card {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(128, 0, 255, 0.3);
+        }
+
+        .goal-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .success, .error {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .error {
+            background: rgba(255, 0, 128, 0.1);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        .calculator-result {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 10px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .operations {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-level {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                margin: 10px auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- User Level System -->
+    <div class="user-level">
+        <div class="level-badge">Level 5</div>
+        <div style="font-size: 0.8rem; margin-bottom: 5px;">Creator Master</div>
+        <div class="xp-bar">
+            <div class="xp-fill"></div>
+        </div>
+        <div style="font-size: 0.7rem; margin-top: 3px;">1,250 / 2,000 XP</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>💫 FinWise</h1>
+            <p>Smart Finance for Creators & Influencers</p>
+        </div>
+        
+        <div class="card">
+            <h2>📊 Creator Dashboard</h2>
+            <button class="btn" onclick="loadAccounts()">🔄 Refresh Creator Funds</button>
+            <div id="loading" class="loading" style="display: none;">Loading accounts...</div>
+            <div id="accounts" class="accounts-grid"></div>
+        </div>
+
+        <!-- Income Tracking Summary -->
+        <div class="card">
+            <h2>💰 Financial Summary</h2>
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h4>💸 Total Income</h4>
+                    <div class="summary-amount" id="totalIncome">$0.00</div>
+                </div>
+                <div class="summary-card">
+                    <h4>📝 Total Expenses</h4>
+                    <div class="summary-amount" id="totalExpenses">$0.00</div>
+                </div>
+                <div class="summary-card">
+                    <h4>💵 Net Profit</h4>
+                    <div class="summary-amount" id="netProfit">$0.00</div>
+                </div>
+                <div class="summary-card">
+                    <h4>🏦 Stable Income</h4>
+                    <div class="summary-amount" id="stableIncome">$0.00</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="operations">
+            <div class="card">
+                <h2>💰 Track Income</h2>
+                <form onsubmit="addIncome(event)">
+                    <div class="form-group">
+                        <label for="incomeSource">Income Source:</label>
+                        <select id="incomeSource" required>
+                            <option value="">Select income type...</option>
+                            <option value="brand-deal">Brand Deal 🤝</option>
+                            <option value="sponsorship">Sponsorship 💼</option>
+                            <option value="adsense">AdSense 📱</option>
+                            <option value="affiliate">Affiliate Commission 🔗</option>
+                            <option value="merch">Merchandise 👕</option>
+                            <option value="other">Other 💫</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeAmount">Amount:</label>
+                        <input type="number" id="incomeAmount" step="0.01" min="0" required placeholder="Enter income amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeDescription">Description:</label>
+                        <input type="text" id="incomeDescription" placeholder="e.g., Nike collaboration post">
+                    </div>
+                    <button type="submit" class="btn">💸 Add Income</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2>📝 Track Expenses</h2>
+                <form onsubmit="addExpense(event)">
+                    <div class="form-group">
+                        <label for="expenseCategory">Expense Category:</label>
+                        <select id="expenseCategory" required>
+                            <option value="">Select category...</option>
+                            <option value="content">Content Creation 🎬</option>
+                            <option value="equipment">Equipment 📷</option>
+                            <option value="travel">Travel & Events ✈️</option>
+                            <option value="software">Software & Apps 💻</option>
+                            <option value="marketing">Marketing & Ads 📢</option>
+                            <option value="personal">Personal 🏠</option>
+                            <option value="business">Business 💼</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseAmount">Amount:</label>
+                        <input type="number" id="expenseAmount" step="0.01" min="0" required placeholder="Enter expense amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseDescription">Description:</label>
+                        <input type="text" id="expenseDescription" placeholder="e.g., New camera lens">
+                    </div>
+                    <button type="submit" class="btn">💳 Add Expense</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>💰 Account Operations</h2>
+                <div class="form-group">
+                    <label for="accountId">Account ID:</label>
+                    <input type="number" id="accountId" required placeholder="Enter account ID">
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" step="0.01" required placeholder="Enter amount">
+                </div>
+                <button class="btn" onclick="depositMoney()">⬆️ Deposit</button>
+                <button class="btn" onclick="withdrawMoney()">⬇️ Withdraw</button>
+            </div>
+
+            <div class="card">
+                <h2>➕ Create New Account</h2>
+                <form onsubmit="createAccount(event)">
+                    <div class="form-group">
+                        <label for="customerName">Customer Name:</label>
+                        <input type="text" id="customerName" required placeholder="Enter customer name">
+                    </div>
+                    <div class="form-group">
+                        <label for="initialBalance">Initial Balance:</label>
+                        <input type="number" id="initialBalance" step="0.01" min="0" required placeholder="Enter initial balance">
+                    </div>
+                    <button type="submit" class="btn">💳 Create Account</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="card">
+            <h2>📊 Your Financial Analytics</h2>
+            <div class="charts-container">
+                <div class="chart-section">
+                    <h3>💰 Income vs Expenses</h3>
+                    <canvas id="incomeExpenseChart" width="400" height="200"></canvas>
+                </div>
+                <div class="chart-section">
+                    <h3>📝 Expense Categories</h3>
+                    <canvas id="expensePieChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Features Section -->
+        <div class="operations">
+            <div class="card">
+                <h2>🧮 Tax Calculator</h2>
+                <div class="form-group">
+                    <label for="taxableIncome">Quarterly Income:</label>
+                    <input type="number" id="taxableIncome" step="0.01" placeholder="Enter quarterly income">
+                </div>
+                <button class="btn" onclick="calculateTax()">Calculate Tax</button>
+                <div id="taxResult" class="calculator-result" style="display: none;"></div>
+            </div>
+
+            <div class="card">
+                <h2>💰 Brand Deal Calculator</h2>
+                <div class="form-group">
+                    <label for="followers">Followers:</label>
+                    <input type="number" id="followers" placeholder="Enter follower count">
+                </div>
+                <div class="form-group">
+                    <label for="engagement">Engagement Rate (%):</label>
+                    <input type="number" id="engagement" step="0.01" placeholder="Enter engagement rate">
+                </div>
+                <button class="btn" onclick="calculateBrandDealRate()">Calculate Rate</button>
+                <div id="brandDealResult" class="calculator-result" style="display: none;"></div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Income Stabilizer</h2>
+                <button class="btn" onclick="calculateStableIncome()">Calculate Stable Monthly Income</button>
+                <div id="stabilizeResult" class="calculator-result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Goals Section -->
+        <div class="card">
+            <h2>🎯 Creator Goals</h2>
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <h4>📷 New Camera Fund</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%" id="cameraProgress"></div>
+                    </div>
+                    <p id="cameraGoal">$650 / $1000</p>
+                </div>
+                <div class="goal-card">
+                    <h4>🏠 Emergency Fund</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%" id="emergencyProgress"></div>
+                    </div>
+                    <p id="emergencyGoal">$1500 / $5000</p>
+                </div>
+                <div class="goal-card">
+                    <h4>✈️ Creator Conference Trip</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%" id="tripProgress"></div>
+                    </div>
+                    <p id="tripGoal">$850 / $1000</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let incomeData = [];
+        let expenseData = [];
+        let incomeExpenseChart;
+        let expensePieChart;
+
+        // Initialize on page load
+        window.onload = function() {
+            loadAccounts();
+            initializeSampleData();
+            updateCharts();
+            updateSummary();
+        };
+
+        function initializeSampleData() {
+            incomeData = [
+                { source: 'brand-deal', amount: 2500, description: 'Nike collaboration', date: new Date() },
+                { source: 'adsense', amount: 450, description: 'YouTube AdSense', date: new Date() },
+                { source: 'affiliate', amount: 200, description: 'Amazon affiliate', date: new Date() }
+            ];
+            
+            expenseData = [
+                { category: 'equipment', amount: 800, description: 'New camera lens', date: new Date() },
+                { category: 'software', amount: 50, description: 'Adobe subscription', date: new Date() },
+                { category: 'content', amount: 200, description: 'Props and backdrop', date: new Date() }
+            ];
+        }
+
+        // Original banking functions
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('accounts').innerHTML = '';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showMessage(message, type = 'success') {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = type;
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+            
+            setTimeout(() => {
+                messageElement.remove();
+            }, 5000);
+        }
+
+        function loadAccounts() {
+            showLoading();
+            fetch('/accounts/all')
+                .then(response => response.json())
+                .then(accounts => {
+                    hideLoading();
+                    displayAccounts(accounts);
+                })
+                .catch(error => {
+                    hideLoading();
+                    showMessage('Error loading accounts: ' + error.message, 'error');
+                });
+        }
+
+        function displayAccounts(accounts) {
+            const accountsDiv = document.getElementById('accounts');
+            
+            if (accounts.length === 0) {
+                accountsDiv.innerHTML = '<p style="text-align: center; color: #666;">No accounts found. Create your first account!</p>';
+                return;
+            }
+
+            accountsDiv.innerHTML = accounts.map(account => `
+                <div class="account-card">
+                    <h3>👤 ${account.name}</h3>
+                    <p>Account ID: #${account.id}</p>
+                    <div class="balance">$${account.balance.toFixed(2)}</div>
+                </div>
+            `).join('');
+        }
+
+        function createAccount(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('customerName').value;
+            const balance = parseFloat(document.getElementById('initialBalance').value);
+
+            const accountData = {
+                name: name,
+                balance: balance
+            };
+
+            fetch('/accounts/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(accountData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showMessage(`Account created successfully for ${name}!`);
+                document.getElementById('customerName').value = '';
+                document.getElementById('initialBalance').value = '';
+                loadAccounts();
+            })
+            .catch(error => {
+                showMessage('Error creating account: ' + error.message, 'error');
+            });
+        }
+
+        function depositMoney() {
+            const accountId = document.getElementById('accountId').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!accountId || !amount || amount <= 0) {
+                showMessage('Please enter valid account ID and positive amount', 'error');
+                return;
+            }
+
+            updateBalance(accountId, amount, 'deposited');
+        }
+
+        function withdrawMoney() {
+            const accountId = document.getElementById('accountId').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!accountId || !amount || amount <= 0) {
+                showMessage('Please enter valid account ID and positive amount', 'error');
+                return;
+            }
+
+            updateBalance(accountId, -amount, 'withdrawn');
+        }
+
+        function updateBalance(accountId, amount, operation) {
+            fetch(`/accounts/${accountId}?amount=${amount}`, {
+                method: 'PUT'
+            })
+            .then(response => response.json())
+            .then(data => {
+                showMessage(`$${Math.abs(amount).toFixed(2)} ${operation} successfully!`);
+                document.getElementById('accountId').value = '';
+                document.getElementById('amount').value = '';
+                loadAccounts();
+            })
+            .catch(error => {
+                showMessage('Error updating balance: ' + error.message, 'error');
+            });
+        }
+
+        // New Creator-focused functions
+        function addIncome(event) {
+            event.preventDefault();
+            
+            const source = document.getElementById('incomeSource').value;
+            const amount = parseFloat(document.getElementById('incomeAmount').value);
+            const description = document.getElementById('incomeDescription').value;
+            
+            incomeData.push({
+                source: source,
+                amount: amount,
+                description: description,
+                date: new Date()
+            });
+            
+            showMessage(`💰 Income of $${amount} added from ${source}!`);
+            
+            // Clear form
+            document.getElementById('incomeSource').value = '';
+            document.getElementById('incomeAmount').value = '';
+            document.getElementById('incomeDescription').value = '';
+            
+            updateCharts();
+            updateSummary();
+        }
+
+        function addExpense(event) {
+            event.preventDefault();
+            
+            const category = document.getElementById('expenseCategory').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            const description = document.getElementById('expenseDescription').value;
+            
+            expenseData.push({
+                category: category,
+                amount: amount,
+                description: description,
+                date: new Date()
+            });
+            
+            showMessage(`📝 Expense of $${amount} added to ${category}!`);
+            
+            // Clear form
+            document.getElementById('expenseCategory').value = '';
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDescription').value = '';
+            
+            updateCharts();
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
+            const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
+            const netProfit = totalIncome - totalExpenses;
+            const stableIncome = totalIncome * 0.8; // 80% for stable income calculation
+
+            document.getElementById('totalIncome').textContent = `$${totalIncome.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `$${netProfit.toFixed(2)}`;
+            document.getElementById('stableIncome').textContent = `$${stableIncome.toFixed(2)}`;
+        }
+
+        function updateCharts() {
+            createIncomeExpenseChart();
+            createExpensePieChart();
+        }
+
+        function createIncomeExpenseChart() {
+    const ctx = document.getElementById('incomeExpenseChart');
+    
+    const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
+    const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
+    
+    if (incomeExpenseChart) {
+        incomeExpenseChart.destroy();
+    }
+    
+    incomeExpenseChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Total Income', 'Total Expenses', 'Net Profit'],
+            datasets: [{
+                label: 'Amount ($)',
+                data: [totalIncome, totalExpenses, totalIncome - totalExpenses],
+                backgroundColor: [
+                    'rgba(0, 255, 136, 0.8)',  // Neon green
+                    'rgba(255, 0, 128, 0.8)',  // Neon pink
+                    'rgba(0, 212, 255, 0.8)'   // Neon blue
+                ],
+                borderColor: [
+                    'rgba(0, 255, 136, 1)',
+                    'rgba(255, 0, 128, 1)',
+                    'rgba(0, 212, 255, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#ffffff'  // White text
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#ffffff',  // White text
+                        callback: function(value) {
+                            return '$' + value;
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createExpensePieChart() {
+    const ctx = document.getElementById('expensePieChart');
+    
+    const categoryTotals = {};
+    expenseData.forEach(expense => {
+        if (categoryTotals[expense.category]) {
+            categoryTotals[expense.category] += expense.amount;
+        } else {
+            categoryTotals[expense.category] = expense.amount;
+        }
+    });
+    
+    const labels = Object.keys(categoryTotals);
+    const data = Object.values(categoryTotals);
+    
+    if (expensePieChart) {
+        expensePieChart.destroy();
+    }
+    
+    expensePieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    '#ff0080',  // Neon pink
+                    '#00d4ff',  // Neon blue
+                    '#ffce56',  // Yellow
+                    '#00ff88',  // Neon green
+                    '#8000ff',  // Purple
+                    '#ff9f40',  // Orange
+                    '#ff6384'   // Light pink
+                ],
+                borderWidth: 3,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#ffffff',  // White text
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+        // Smart calculator functions
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('taxableIncome').value);
+            if (!income) {
+                showMessage('Please enter quarterly income', 'error');
+                return;
+            }
+
+            const estimatedTax = income * 0.25; // 25% estimated tax rate
+            const quarterlyTax = estimatedTax / 4;
+
+            document.getElementById('taxResult').innerHTML = `
+                <div>Estimated Annual Tax: $${estimatedTax.toFixed(2)}</div>
+                <div>Quarterly Payment: $${quarterlyTax.toFixed(2)}</div>
+                <div>Set aside: $${(income * 0.30).toFixed(2)} (30% buffer)</div>
+            `;
+            document.getElementById('taxResult').style.display = 'block';
+        }
+
+        function calculateBrandDealRate() {
+            const followers = parseInt(document.getElementById('followers').value);
+            const engagement = parseFloat(document.getElementById('engagement').value);
+
+            if (!followers || !engagement) {
+                showMessage('Please enter followers and engagement rate', 'error');
+                return;
+            }
+
+            const baseRate = (followers / 1000) * (engagement / 100) * 10;
+            const minRate = baseRate * 0.8;
+            const maxRate = baseRate * 1.5;
+
+            document.getElementById('brandDealResult').innerHTML = `
+                <div>Suggested Rate Range:</div>
+                <div>$${minRate.toFixed(2)} - $${maxRate.toFixed(2)} per post</div>
+                <div>Story Rate: $${(minRate * 0.5).toFixed(2)} - $${(maxRate * 0.5).toFixed(2)}</div>
+            `;
+            document.getElementById('brandDealResult').style.display = 'block';
+        }
+
+        function calculateStableIncome() {
+            const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
+            const months = 3; // Assuming 3 months of data
+            const avgMonthlyIncome = totalIncome / months;
+            const stableMonthlyIncome = avgMonthlyIncome * 0.8; // Conservative 80%
+
+            document.getElementById('stabilizeResult').innerHTML = `
+                <div>Average Monthly Income: $${avgMonthlyIncome.toFixed(2)}</div>
+                <div>Stable Monthly Allowance: $${stableMonthlyIncome.toFixed(2)}</div>
+                <div>Buffer Fund: $${(avgMonthlyIncome - stableMonthlyIncome).toFixed(2)}/month</div>
+            `;
+            document.getElementById('stabilizeResult').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
