@@ -688,7 +688,34 @@
                 <div id="stabilizeResult" class="calculator-result" style="display: none;"></div>
             </div>
         </div>
-
+        <!-- Add this inside your operations div, after the Income Stabilizer card -->
+        <div class="card">
+            <h2>⚖️ Investment Break-even Calculator</h2>
+            <div class="form-group">
+                <label for="investmentName">What are you investing in?</label>
+                <input type="text" id="investmentName" placeholder="e.g., Camera, Trip to VidCon, Course, Studio">
+            </div>
+            <div class="form-group">
+                <label for="investmentCost">Investment Cost:</label>
+                <input type="number" id="investmentCost" step="0.01" placeholder="e.g., $1200">
+            </div>
+            <div class="form-group">
+                <label for="monthlyIncomeIncrease">Expected Monthly Income Boost:</label>
+                <input type="number" id="monthlyIncomeIncrease" step="0.01" placeholder="e.g., $300 extra per month">
+            </div>
+            <button class="btn" onclick="calculateBreakEven()">⚖️ Calculate Worth It?</button>
+            <div id="breakEvenResult" class="calculator-result" style="display: none;"></div>
+        </div>
+        <div class="card">
+            <h2>🚀 Creator Quick Wins</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                <button class="btn" onclick="dailyMotivation()">💪 Daily Push</button>
+                <button class="btn" onclick="taxReminder()">📅 Tax Check</button>
+                <button class="btn" onclick="celebrateWins()">🎉 Celebrate</button>
+                <button class="btn" onclick="weeklyGoals()">🎯 Week Goals</button>
+            </div>
+            <div id="quickWinsDisplay" style="margin-top: 15px;"></div>
+        </div>
         <!-- Goals Section -->
         <div class="card">
             <h2>🎯 Creator Goals</h2>
@@ -719,6 +746,7 @@
         
         <div id="messages"></div>
     </div>
+    
 
     <script>
         // Global variables
@@ -924,16 +952,21 @@
         }
 
         function updateSummary() {
-            const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
-            const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
-            const netProfit = totalIncome - totalExpenses;
-            const stableIncome = totalIncome * 0.8; // 80% for stable income calculation
+    const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
+    const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
+    const netProfit = totalIncome - totalExpenses;
+    const stableIncome = totalIncome * 0.8;
 
-            document.getElementById('totalIncome').textContent = `$${totalIncome.toFixed(2)}`;
-            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
-            document.getElementById('netProfit').textContent = `$${netProfit.toFixed(2)}`;
-            document.getElementById('stableIncome').textContent = `$${stableIncome.toFixed(2)}`;
-        }
+    document.getElementById('totalIncome').textContent = `$${totalIncome.toFixed(2)}`;
+    document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
+    document.getElementById('netProfit').textContent = `$${netProfit.toFixed(2)}`;
+    document.getElementById('stableIncome').textContent = `$${stableIncome.toFixed(2)}`;
+    
+    // CHANGE THIS LINE:
+    // calculateIrregularBudget();
+    // TO THIS:
+    setTimeout(calculateIrregularBudget, 100); // Delay to ensure elements exist
+}
 
         function updateCharts() {
             createIncomeExpenseChart();
@@ -1110,6 +1143,141 @@ function createExpensePieChart() {
             `;
             document.getElementById('stabilizeResult').style.display = 'block';
         }
+
+        // Updated Investment Calculator
+function calculateBreakEven() {
+    const investmentName = document.getElementById('investmentName').value || 'this investment';
+    const investmentCost = parseFloat(document.getElementById('investmentCost').value);
+    const monthlyIncrease = parseFloat(document.getElementById('monthlyIncomeIncrease').value);
+    
+    if (!investmentCost || !monthlyIncrease) {
+        showMessage('Please fill in the cost and monthly income boost', 'error');
+        return;
+    }
+    
+    const monthsToBreakEven = investmentCost / monthlyIncrease;
+    const roiPercentage = (monthlyIncrease * 12 / investmentCost) * 100;
+    
+    let recommendation = '';
+    let emoji = '';
+    
+    if (monthsToBreakEven <= 3) {
+        recommendation = 'AMAZING investment! Do it NOW! 🔥';
+        emoji = '💚';
+    } else if (monthsToBreakEven <= 6) {
+        recommendation = 'GREAT investment! Worth it! ✨';
+        emoji = '💛';
+    } else if (monthsToBreakEven <= 12) {
+        recommendation = 'DECENT investment. Consider it! 🤔';
+        emoji = '🟡';
+    } else {
+        recommendation = 'Maybe wait or find alternatives... 😬';
+        emoji = '❌';
+    }
+    
+    document.getElementById('breakEvenResult').innerHTML = `
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div style="font-size: 2rem;">${emoji}</div>
+            <div style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;">${recommendation}</div>
+        </div>
+        <div>💰 <strong>${investmentName}</strong> will pay for itself in <strong>${monthsToBreakEven.toFixed(1)} months</strong></div>
+        <div>📈 Annual ROI: <strong>${roiPercentage.toFixed(0)}%</strong></div>
+        <div style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+            After 1 year: +$${(monthlyIncrease * 12).toFixed(0)} extra income
+        </div>
+    `;
+    document.getElementById('breakEvenResult').style.display = 'block';
+    updateXP(15);
+}
+
+// Quick Wins Functions
+function dailyMotivation() {
+    const motivations = [
+        "🔥 Today's the day you create something AMAZING!",
+        "💪 Every post is building your empire. Keep going!",
+        "⚡ Your next viral moment is just one video away!",
+        "🎯 Focus on progress, not perfection. You got this!",
+        "🚀 Remember: Every expert was once a beginner!",
+        "💡 Create something that makes YOU excited today!",
+        "🌟 Your authentic voice is your superpower!"
+    ];
+    
+    const randomMotivation = motivations[Math.floor(Math.random() * motivations.length)];
+    
+    document.getElementById('quickWinsDisplay').innerHTML = `
+        <div style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); 
+                    color: black; padding: 20px; border-radius: 10px; text-align: center;">
+            <h3 style="margin-bottom: 10px;">💪 Daily Creator Boost</h3>
+            <p style="font-size: 1.1rem; font-weight: 600;">${randomMotivation}</p>
+        </div>
+    `;
+    updateXP(5);
+}
+
+function taxReminder() {
+    const today = new Date();
+    const quarter = Math.floor((today.getMonth() + 3) / 3);
+    const nextDue = quarter === 1 ? 'Apr 15' : quarter === 2 ? 'Jun 15' : quarter === 3 ? 'Sep 15' : 'Jan 15';
+    
+    document.getElementById('quickWinsDisplay').innerHTML = `
+        <div style="background: var(--glass-bg); padding: 15px; border-radius: 10px; 
+                    border: 1px solid var(--neon-pink);">
+            <h3 style="color: var(--neon-pink); margin-bottom: 10px;">📅 Tax Smart Check</h3>
+            <p>💰 Next quarterly due: <strong>${nextDue}</strong></p>
+            <p>🎯 Set aside: <strong>25-30%</strong> of earnings</p>
+            <p>📋 Deductible this month: Equipment, software, travel</p>
+            <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">
+                💡 Pro tip: Save receipts in your phone photos!
+            </p>
+        </div>
+    `;
+    updateXP(10);
+}
+
+function celebrateWins() {
+    const wins = [
+        "🎉 You're building your creative empire!",
+        "📈 Every day you're getting better at this!",
+        "💪 You chose the creator path - that takes courage!",
+        "🌟 Your content is making someone's day better!",
+        "🚀 You're living your dream life!",
+        "💡 Your creativity is your competitive advantage!"
+    ];
+    
+    const randomWin = wins[Math.floor(Math.random() * wins.length)];
+    
+    document.getElementById('quickWinsDisplay').innerHTML = `
+        <div style="background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple)); 
+                    color: white; padding: 20px; border-radius: 10px; text-align: center;">
+            <h3 style="margin-bottom: 15px;">🎉 YOU'RE WINNING!</h3>
+            <p style="font-size: 1.2rem; margin-bottom: 15px;">${randomWin}</p>
+            <div style="font-size: 0.9rem; opacity: 0.9;">
+                Keep creating, keep growing, keep being awesome! ✨
+            </div>
+        </div>
+    `;
+    createConfetti();
+    updateXP(20);
+}
+
+function weeklyGoals() {
+    document.getElementById('quickWinsDisplay').innerHTML = `
+        <div style="background: var(--glass-bg); padding: 15px; border-radius: 10px; 
+                    border: 1px solid var(--neon-blue);">
+            <h3 style="color: var(--neon-blue); margin-bottom: 10px;">🎯 This Week's Creator Goals</h3>
+            <div style="color: var(--text-secondary);">
+                <p>📱 Post: <strong>5 pieces of content</strong></p>
+                <p>💰 Earn: <strong>$600+ this week</strong></p>
+                <p>📈 Engage: <strong>Reply to 50 comments</strong></p>
+                <p>🎥 Create: <strong>1 longer-form video</strong></p>
+                <p>🤝 Network: <strong>Connect with 3 creators</strong></p>
+            </div>
+        </div>
+    `;
+    updateXP(15);
+}
+
     </script>
 </body>
 </html>
+
