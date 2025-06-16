@@ -9,9 +9,15 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/1.png" alt="FinWise Dashboard Preview" width="800">
-  
-  *Screenshot coming soon - visit the [live demo](https://finwise-springboot-app-665d5dc86747.herokuapp.com) to see the full interface!*
+  <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/screenshots/1.png" alt="FinWise Dashboard Preview" width="800">
+    <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/screenshots/3.png" alt="FinWise Dashboard Preview" width="800">
+  <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/screenshots/4.png" alt="FinWise Dashboard Preview" width="800">
+  <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/screenshots/5.png" alt="FinWise Dashboard Preview" width="800">
+  <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/screenshots/6.png" alt="FinWise Dashboard Preview" width="800">
+    <img src="https://raw.githubusercontent.com/MK-2206/FINWISE-APP/main/screenshots/7.png" alt="FinWise Dashboard Preview" width="800">
+
+
+  **Visit the [live demo](https://finwise-springboot-app-665d5dc86747.herokuapp.com) to see the full interface!**
 </div>
 
 ---
@@ -84,8 +90,7 @@ FinWise is a full-stack banking application that transforms chaotic creator fina
 ### Prerequisites
 - **Java 17+** (for Spring Boot backend)
 - **Maven 3.6+** (for dependency management)
-- **Modern web browser**
-- ☕ Coffee (essential for Java development)
+
 
 ### Local Setup Instructions
 
@@ -250,16 +255,6 @@ We welcome contributions! Here's how to get started:
 4. **Push** to the branch: `git push origin feature/amazing-feature`
 5. **Open** a Pull Request
 
-### 💡 **Contribution Ideas**
-- 🎨 New UI themes and color schemes
-- 📊 Advanced analytics and reporting features
-- 🔗 Integration with creator platforms (YouTube Analytics, Patreon API)
-- 📱 Mobile app version with React Native
-- 🤖 AI-powered financial insights and recommendations
-- 🌍 Multi-currency support for global creators
-- 🔐 Enhanced security features and user authentication
-
----
 
 ## 🏆 Achievements & Milestones
 
@@ -296,24 +291,8 @@ Perfect for learning, portfolio projects, and commercial use.
 
 ---
 
-## 📞 Support & Contact
 
-<div align="center">
 
-### 💬 **Get Help**
-[![GitHub Issues](https://img.shields.io/badge/GitHub-Issues-red?style=for-the-badge&logo=github)](https://github.com/MK-2206/FINWISE-APP/issues)
-[![Email](https://img.shields.io/badge/Email-Contact-blue?style=for-the-badge&logo=gmail)](mailto:mdkharke06@gmail.com)
-
-### 🌟 **Show Your Support**
-If FinWise helped you manage your creator finances, give us a ⭐!
-
-[![Star on GitHub](https://img.shields.io/github/stars/MK-2206/FINWISE-APP?style=social)](https://github.com/MK-2206/FINWISE-APP/stargazers)
-
-</div>
-
----
-
-<div align="center">
   
 ### 💎 **Professional Creator Banking**
 
